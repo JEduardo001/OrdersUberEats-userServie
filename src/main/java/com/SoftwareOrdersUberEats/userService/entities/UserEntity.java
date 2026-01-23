@@ -1,12 +1,11 @@
 package com.SoftwareOrdersUberEats.userService.entities;
 
-import com.SoftwareOrdersUberEats.userService.enums.StatusResourceUser;
+import com.SoftwareOrdersUberEats.userService.enums.statesResource.StatusResourceUserEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.IdGeneratorType;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -22,12 +21,13 @@ public class UserEntity {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
     private String name;
     private String lastname;
     private LocalDate birthday;
-    private StatusResourceUser status;
+    @Enumerated(EnumType.STRING)
+    private StatusResourceUserEnum status;
     private Instant createAt;
     private Instant disableAt;
 }

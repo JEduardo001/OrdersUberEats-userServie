@@ -1,6 +1,6 @@
 package com.SoftwareOrdersUberEats.userService.dto.user;
 
-import com.SoftwareOrdersUberEats.userService.enums.StatusResourceUser;
+import com.SoftwareOrdersUberEats.userService.enums.statesResource.StatusResourceUserEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class DtoUser {
     private String name;
     private String lastname;
     private LocalDate birthday;
-    private StatusResourceUser status;
+    private StatusResourceUserEnum status;
     private Instant createAt;
     private Instant disableAt;
 }

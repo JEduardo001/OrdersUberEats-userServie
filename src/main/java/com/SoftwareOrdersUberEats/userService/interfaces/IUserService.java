@@ -4,6 +4,8 @@ import com.SoftwareOrdersUberEats.userService.dto.responseApi.DtoPageableRespons
 import com.SoftwareOrdersUberEats.userService.dto.user.DtoCreateUser;
 import com.SoftwareOrdersUberEats.userService.dto.user.DtoUpdateUser;
 import com.SoftwareOrdersUberEats.userService.dto.user.DtoUser;
+import com.SoftwareOrdersUberEats.userService.enums.statesCreateResource.ResultEventEnum;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +13,7 @@ import java.util.UUID;
 public interface IUserService {
     DtoPageableResponse<List<DtoUser>> getAll(int page, int size);
     DtoUser get(UUID id);
+    @Transactional
     DtoUser update(DtoUpdateUser id);
-    void create(DtoCreateUser request);
+    ResultEventEnum create(DtoCreateUser request);
 }

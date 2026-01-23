@@ -1,6 +1,6 @@
 package com.SoftwareOrdersUberEats.userService.dto.user;
 
-import com.SoftwareOrdersUberEats.userService.enums.StatusResourceUser;
+import com.SoftwareOrdersUberEats.userService.enums.statesResource.StatusResourceUserEnum;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -24,5 +24,5 @@ public class DtoUpdateUser {
     @NotNull
     private LocalDate birthday;
     @NotNull
-    private StatusResourceUser status;
+    private StatusResourceUserEnum status;
 }
