@@ -7,6 +7,7 @@ import com.SoftwareOrdersUberEats.userService.dto.user.DtoCreateUser;
 import com.SoftwareOrdersUberEats.userService.enums.statesCreateResource.ResultEventEnum;
 import com.SoftwareOrdersUberEats.userService.enums.typeEvents.TypeEventEnum;
 import com.SoftwareOrdersUberEats.userService.service.OutboxEventService;
+import com.SoftwareOrdersUberEats.userService.service.ProcessedEventService;
 import com.SoftwareOrdersUberEats.userService.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -20,6 +21,7 @@ public class Consumer {
     private final UserService userService;
     private final ObjectMapper objectMapper;
     private final OutboxEventService outboxEventService;
+    private final ProcessedEventService processedEventService;
 
     @KafkaListener(topics = "creating.user", groupId = "users")
     public void handleCreateUser(String rawEvent) {
