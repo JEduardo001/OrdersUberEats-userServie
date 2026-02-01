@@ -1,5 +1,6 @@
 package com.SoftwareOrdersUberEats.userService.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,7 +11,6 @@ import com.SoftwareOrdersUberEats.userService.dto.user.DtoUpdateUser;
 import com.SoftwareOrdersUberEats.userService.dto.user.DtoUser;
 import com.SoftwareOrdersUberEats.userService.entities.UserEntity;
 import com.SoftwareOrdersUberEats.userService.enums.statesCreateResource.ResultEventEnum;
-import com.SoftwareOrdersUberEats.userService.enums.statesResource.StatusResourceUserEnum;
 import com.SoftwareOrdersUberEats.userService.exception.user.UserNotFoundException;
 import com.SoftwareOrdersUberEats.userService.interfaces.IUserService;
 import com.SoftwareOrdersUberEats.userService.mapper.UserMapper;
@@ -29,14 +29,16 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.SoftwareOrdersUberEats.userService.constant.TracerConstants.*;
+
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final Validator validator;
-    private final OutboxEventService outboxEventService;
 
 
     private UserEntity getUser(UUID id){
@@ -69,15 +71,19 @@ public class UserService implements IUserService {
             Set<ConstraintViolation<DtoCreateUser>> violations = validator.validate(request);
 
             if (!violations.isEmpty()) {
+                log.info(MESSAGE_DATA_VALIDATION_TO_CREATE_USER_ERROR);
                 return ResultEventEnum.VALIDATION_ERROR;
             }
 
             if (userRepository.existsById(request.getId())) {
                 return ResultEventEnum.ALREADY_EXISTS;
             }
+            UserEntity user = userMapper.toEntityToCreate(request);
+            user.setCreateAt(Instant.now());
 
-            userRepository.save(userMapper.toEntityToCreate(request));
+            userRepository.save(user);
             userRepository.flush();
+            log.info(MESSAGE_SAVE_USER);
 
             return ResultEventEnum.CREATED;
         } catch (DataIntegrityViolationException | ObjectOptimisticLockingFailureException e) {
@@ -90,10 +96,12 @@ public class UserService implements IUserService {
     public DtoUser update(DtoUpdateUser request){
         UserEntity actualDataUser = getUser(request.getId());
 
-        actualDataUser.setDisableAt( request.getStatus().equals(StatusResourceUserEnum.DISABLE) ? Instant.now() : null);
         userMapper.toEntityToUpdate(request,actualDataUser);
+        UserEntity user = userRepository.save(actualDataUser);
 
-        return userMapper.toDto(userRepository.save(actualDataUser));
+        log.info(MESSAGE_UPDATE_USER, user.getId());
+
+        return userMapper.toDto(user);
     }
 
 }

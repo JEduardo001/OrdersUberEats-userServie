@@ -5,11 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 @Builder
 public class DtoResponseApiWithoutData {
-    private Integer status;
-    private String message;
+    Integer status;
+    String message;
+    String correlationId;
+
 }

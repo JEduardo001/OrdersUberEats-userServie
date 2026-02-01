@@ -1,6 +1,5 @@
 package com.SoftwareOrdersUberEats.userService.entities;
 
-import com.SoftwareOrdersUberEats.userService.enums.statesResource.StatusResourceUserEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,8 +25,5 @@ public class UserEntity {
     private String name;
     private String lastname;
     private LocalDate birthday;
-    @Enumerated(EnumType.STRING)
-    private StatusResourceUserEnum status;
     private Instant createAt;
-    private Instant disableAt;
 }

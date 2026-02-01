@@ -17,5 +17,6 @@ public class DtoEvent<T> {
     private TypeEventEnum typeEvent;
     private ResultEventEnum resultEvent;
     private UUID idEvent;
+    private String correlationId;
     private T data;
 }

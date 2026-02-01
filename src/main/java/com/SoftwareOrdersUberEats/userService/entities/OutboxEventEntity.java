@@ -24,7 +24,9 @@ public class OutboxEventEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String nameTopic;
+    @Column(columnDefinition = "TEXT")
     private String payload;
+    private String correlationId;
     @Enumerated(EnumType.STRING)
     private TypeEventEnum typeEvent;
     @Enumerated(EnumType.STRING)

@@ -3,9 +3,9 @@ package com.SoftwareOrdersUberEats.userService.controller;
 import com.SoftwareOrdersUberEats.userService.constant.ApiBase;
 import com.SoftwareOrdersUberEats.userService.dto.responseApi.DtoPageableResponse;
 import com.SoftwareOrdersUberEats.userService.dto.responseApi.DtoResponseApi;
-import com.SoftwareOrdersUberEats.userService.dto.user.DtoCreateUser;
 import com.SoftwareOrdersUberEats.userService.dto.user.DtoUpdateUser;
 import com.SoftwareOrdersUberEats.userService.dto.user.DtoUser;
+import com.SoftwareOrdersUberEats.userService.service.MappedDiagnosticService;
 import com.SoftwareOrdersUberEats.userService.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -22,6 +22,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final MappedDiagnosticService mappedDiagnosticService;
 
     @GetMapping()
     public ResponseEntity<DtoPageableResponse<List<DtoUser>>> getAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
@@ -32,6 +33,7 @@ public class UserController {
     public ResponseEntity<DtoResponseApi<?>> getUser(@PathVariable UUID idUser){
         return ResponseEntity.status(HttpStatus.OK).body(DtoResponseApi.builder()
                 .status(HttpStatus.OK.value())
+                .idCorrelation(mappedDiagnosticService.getIdCorrelation())
                 .message("User obtained")
                 .data(userService.get(idUser))
                 .build());
@@ -41,6 +43,7 @@ public class UserController {
     public ResponseEntity<DtoResponseApi<?>> updateUser(@Valid @RequestBody DtoUpdateUser request){
         return ResponseEntity.status(HttpStatus.OK).body(DtoResponseApi.builder()
                 .status(HttpStatus.OK.value())
+                .idCorrelation(mappedDiagnosticService.getIdCorrelation())
                 .message("User updated")
                 .data(userService.update(request))
                 .build());
